@@ -1,59 +1,120 @@
-import React, { useState, useEffect } from "react";
-import Loading from "./Loading";
-import Tours from "./Tours";
-import "regenerator-runtime/runtime";
+// import React, { useState, useEffect } from "react";
+// import Loading from "./Loading";
+// import Tours from "./Tours";
+// import "regenerator-runtime/runtime";
 
 
- const url =  "https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project";
+//  const url =  "https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project";
 
-;
+// ;
+
+// function App() {
+//   const [loading, setLoading] = useState(true);
+//   const [tours, setTours] = useState([]);
+
+//   const fetchTours = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await fetch(url);
+//       const data = await response.json();
+//       setTours(data);
+//       setLoading(false);
+//     } catch (error) {
+//       setLoading(false);
+//       console.log(error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchTours();
+//   }, []);
+
+//   const removeTour = (id) => {
+//     const newTours = tours.filter((tour) => tour.id !== id);
+//     setTours(newTours);
+//   };
+
+//   if (loading) {
+//     return <Loading />;
+//   }
+
+//   if (tours.length === 0) {
+//     return (
+//       <main style={{ textAlign: "center", marginTop: "50px" }}>
+//         <h2>No Tours Left</h2>
+//         <button onClick={fetchTours} className="refresh-btn">
+//           Refresh
+//         </button>
+//       </main>
+//     );
+//   }
+
+//   return (
+//     <main>
+//       <h1 style={{ textAlign: "center" }}>Our Tours</h1>
+//       <Tours tours={tours} removeTour={removeTour} />
+//     </main>
+//   );
+// }
+
+// export default App;
+
+
+
+
+
+import React ,{ useEffect, useState } from "react";
+import toursData from "./data";
+import Tour from "./Tour";
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [tours, setTours] = useState([]);
 
-  const fetchTours = async () => {
+  function fetchTours() {
     setLoading(true);
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      setTours(data);
+
+    // Simulate API delay
+    setTimeout(() => {
+      setTours(toursData);
       setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
+    }, 1500);
+  }
 
   useEffect(() => {
     fetchTours();
   }, []);
 
-  const removeTour = (id) => {
+  function removeTour(id) {
     const newTours = tours.filter((tour) => tour.id !== id);
     setTours(newTours);
-  };
+  }
 
   if (loading) {
-    return <Loading />;
+    return (
+      <h1 style={{ textAlign: "center", marginTop: "40px" }}>Loading...</h1>
+    );
   }
 
   if (tours.length === 0) {
     return (
-      <main style={{ textAlign: "center", marginTop: "50px" }}>
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
         <h2>No Tours Left</h2>
         <button onClick={fetchTours} className="refresh-btn">
-          Refresh
+          Refresh Tours
         </button>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main>
-      <h1 style={{ textAlign: "center" }}>Our Tours</h1>
-      <Tours tours={tours} removeTour={removeTour} />
-    </main>
+    <div className="container">
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Our Tours</h1>
+
+      {tours.map((tour) => (
+        <Tour key={tour.id} {...tour} removeTour={removeTour} />
+      ))}
+    </div>
   );
 }
 
